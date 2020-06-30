@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Ophthalmology xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:nsCommon="http://www.joia.or.jp/standardized/namespaces/Common" xmlns:nsLM="http://www.joia.or.jp/standardized/namespaces/LM" xsi:schemaLocation="http://www.joia.or.jp/standardized/namespaces/Common Common_schema.xsd http://www.joia.or.jp/standardized/namespaces/LM LM_schema.xsd">
+	<nsCommon:Common>
+		<nsCommon:Company>TOPCON</nsCommon:Company>
+		<nsCommon:ModelName>CL-300</nsCommon:ModelName>
+		<nsCommon:MachineNo>02</nsCommon:MachineNo>
+		<nsCommon:ROMVersion>1.05.00</nsCommon:ROMVersion>
+		<nsCommon:Version>1.2</nsCommon:Version>
+		<nsCommon:Date>2012-01-01</nsCommon:Date>
+		<nsCommon:Time>12:34:56</nsCommon:Time>
+		<nsCommon:Patient>
+			<nsCommon:No.>1945</nsCommon:No.>
+			<nsCommon:ID>1945</nsCommon:ID>
+			<nsCommon:FirstName></nsCommon:FirstName>
+			<nsCommon:MiddleName></nsCommon:MiddleName>
+			<nsCommon:LastName></nsCommon:LastName>
+			<nsCommon:Sex></nsCommon:Sex>
+			<nsCommon:Age></nsCommon:Age>
+			<nsCommon:DOB></nsCommon:DOB>
+			<nsCommon:NameJ1></nsCommon:NameJ1>
+			<nsCommon:NameJ2></nsCommon:NameJ2>
+		</nsCommon:Patient>
+		<nsCommon:Operator>
+			<nsCommon:No.></nsCommon:No.>
+			<nsCommon:ID></nsCommon:ID>
+		</nsCommon:Operator>
+	</nsCommon:Common>
+	<nsLM:Measure type="LM">
+		<nsLM:DiopterStep unit="D">0.25</nsLM:DiopterStep>
+		<nsLM:AxisStep unit="deg">1</nsLM:AxisStep>
+		<nsLM:PrismStep unit="D">0.25</nsLM:PrismStep>
+		<nsLM:CylinderMode>-</nsLM:CylinderMode>
+		<nsLM:LensType>glass</nsLM:LensType>
+		<nsLM:AbbeNumber></nsLM:AbbeNumber>
+		<nsLM:Wavelength>e</nsLM:Wavelength>
+		<nsLM:LM>
+			<nsLM:R>
+				<nsLM:Sphere unit="D"> +1.75</nsLM:Sphere>
+				<nsLM:Cylinder unit="D"> -0.25</nsLM:Cylinder>
+				<nsLM:Axis unit="deg">170</nsLM:Axis>
+				<nsLM:Add1 unit="D"></nsLM:Add1>
+				<nsLM:Add2 unit="D"></nsLM:Add2>
+				<nsLM:H Prism="P"></nsLM:H>
+				<nsLM:V Prism="P"></nsLM:V>
+			</nsLM:R>
+			<nsLM:L>
+				<nsLM:Sphere unit="D"> +2.00</nsLM:Sphere>
+				<nsLM:Cylinder unit="D"> -0.25</nsLM:Cylinder>
+				<nsLM:Axis unit="deg"> 38</nsLM:Axis>
+				<nsLM:Add1 unit="D"></nsLM:Add1>
+				<nsLM:Add2 unit="D"></nsLM:Add2>
+				<nsLM:H Prism="P"></nsLM:H>
+				<nsLM:V Prism="P"></nsLM:V>
+			</nsLM:L>
+		</nsLM:LM>
+	</nsLM:Measure>
+</Ophthalmology>
