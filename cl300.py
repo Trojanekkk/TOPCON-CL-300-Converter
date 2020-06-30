@@ -2,8 +2,8 @@ from os import listdir
 from os.path import isfile, join
 from xml.etree import ElementTree as ET
 
-path_in = "in"
-path_out = "out"
+path_in = "input"
+path_out = "output"
 nsCommon = "{http://www.joia.or.jp/standardized/namespaces/Common}"
 nsLM = "{http://www.joia.or.jp/standardized/namespaces/LM}"
 
