@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import isfile, join
 from xml.etree import ElementTree as ET
+import tkinter as tk
 
 path_in = "input"
 path_out = "output"
@@ -41,9 +42,35 @@ class Measure:
             'lVPrism' : self.getObj("./Measure/LM/L/V", nsLM).attrib['Prism']
         }
 
+        return self.details
+
 files = [file for file in listdir(path_in) if isfile(join(path_in , file))]
 
+window = tk.Tk()
+window.title("TOPCON CL300 Doc converter - SPEKTRUM Sp. z o.o.")
+
+lbox = tk.Listbox(window)
+
+label_name = tk.Label(window, text="Imię")
+label_surname = tk.Label(window, text="Nazwisko")
+label_id = tk.Label(window, text="PESEL")
+entry_name = tk.Entry(window)
+entry_surname = tk.Entry(window)
+entry_id = tk.Entry(window)
+
+lbox.grid(row=0, column=0, rowspan=6)
+label_name.grid(row=0, column=1)
+entry_name.grid(row=1, column=1)
+label_surname.grid(row=2, column=1)
+entry_surname.grid(row=3, column=1)
+label_id.grid(row=4, column=1)
+entry_id.grid(row=5, column=1)
+
 for file in files:
-    measure = Measure(file)
-    measure.getDetails()
-    print(measure.details)
+    lbox.insert(tk.END, file)
+
+#     measure = Measure(file)
+#     measure.getDetails()
+#     print(measure.details)
+
+window.mainloop()
