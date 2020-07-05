@@ -44,11 +44,6 @@ class Measure:
             'patientId' : id
         }
 
-    def addPatientDetails(self, name, surname, id):
-        self.details['patientName'] = name
-        self.details['patientSurname'] = surname
-        self.details['patientId'] = id
-
     def getObj (self, path, ns):
         return self.root.find(path.replace("/", "/{0}").format(ns))
 
