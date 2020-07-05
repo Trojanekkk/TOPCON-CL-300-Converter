@@ -1,4 +1,4 @@
-from os import listdir, chdir
+from os import listdir, chdir, startfile
 from os.path import isfile, join, getmtime
 from xml.etree import ElementTree as ET
 import tkinter as tk
@@ -47,7 +47,7 @@ class Measure:
     def getObj (self, path, ns):
         return self.root.find(path.replace("/", "/{0}").format(ns))
 
-    def getDetails(self):
+    def getDetails (self):
         return self.details
 
 # Search for files in input path
@@ -65,8 +65,15 @@ def generateDoc (event):
     id = entry_id.get()
 
     measure = Measure(selected, name, surname, id)
-    measure.getDetails()
     print(measure.getDetails())
+
+    if len(list(measure.details)) > 0:
+        entry_name.delete(0, tk.END)
+        entry_surname.delete(0, tk.END)
+        entry_id.delete(0, tk.END)
+    
+def exploreInputPath (event):
+    startfile(path_out)
 
 # Create GUI
 window = tk.Tk()
@@ -81,6 +88,7 @@ entry_name = tk.Entry(window)
 entry_surname = tk.Entry(window)
 entry_id = tk.Entry(window)
 button_submit = tk.Button(window, text="Generuj dokument")
+button_explore = tk.Button(window, text="Otwórz folder wyjsciowy")
 
 lbox.grid(row=0, column=0, rowspan=6, padx=10, pady=10)
 label_name.grid(row=0, column=1)
@@ -90,6 +98,7 @@ entry_surname.grid(row=3, column=1, padx=(0, 10))
 label_id.grid(row=4, column=1)
 entry_id.grid(row=5, column=1, padx=(0, 10))
 button_submit.grid(pady=(0, 10))
+button_explore.grid(pady=(0, 10))
 
 # Feed listbox with files
 for file in files:
@@ -97,6 +106,7 @@ for file in files:
 
 # Bind actions
 button_submit.bind('<Button-1>', generateDoc)
+button_explore.bind('<Button-1>', exploreInputPath)
 
 # Begin mainloop
 window.mainloop()
