@@ -8,8 +8,8 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 
 # App config
-path_in = "C:/input/"
-path_out = "C:/output/"
+path_in = "C:/Users/Wojciech Trojanowski/OneDrive/Projekty/Python/TOPCON-CL-300-Converter/input/"
+path_out = "C:/Users/Wojciech Trojanowski/OneDrive/Projekty/Python/TOPCON-CL-300-Converter/output/"
 nsCommon = "{http://www.joia.or.jp/standardized/namespaces/Common}"
 nsLM = "{http://www.joia.or.jp/standardized/namespaces/LM}"
 
@@ -132,8 +132,8 @@ label_id = tk.Label(window, text="PESEL")
 entry_name = tk.Entry(window)
 entry_surname = tk.Entry(window)
 entry_id = tk.Entry(window)
-button_submit = tk.Button(window, text="Generate PDF")
-button_explore = tk.Button(window, text="Explore output")
+button_submit = tk.Button(window, text="Generuj dokument")
+button_explore = tk.Button(window, text="Otwórz folder wyjsciowy")
 
 lbox.grid(row=0, column=0, rowspan=6, padx=10, pady=10)
 label_name.grid(row=0, column=1)
@@ -142,8 +142,8 @@ label_surname.grid(row=2, column=1)
 entry_surname.grid(row=3, column=1, padx=(0, 10))
 label_id.grid(row=4, column=1)
 entry_id.grid(row=5, column=1, padx=(0, 10))
-button_submit.grid(padx=10, pady=(0, 10), sticky=tk.W+tk.E)
-button_explore.grid(padx=10, pady=(0, 10), sticky=tk.W+tk.E)
+button_submit.grid(pady=(0, 10))
+button_explore.grid(pady=(0, 10))
 
 # Feed listbox with files
 for file in files:
