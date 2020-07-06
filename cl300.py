@@ -2,6 +2,10 @@ from os import listdir, chdir, startfile
 from os.path import isfile, join, getmtime
 from xml.etree import ElementTree as ET
 import tkinter as tk
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
 # App config
 path_in = "C:/input/"
@@ -13,6 +17,7 @@ nsLM = "{http://www.joia.or.jp/standardized/namespaces/LM}"
 class Measure:
     def __init__ (self, file, name, surname, id, path_in="input", path_out="output"):
         self.file = file
+        self.f = f(file)
         tree = ET.parse(join(path_in, file))
         self.root = tree.getroot()
 
@@ -50,15 +55,51 @@ class Measure:
     def getDetails (self):
         return self.details
 
+    def generateDoc (self):
+        doc = SimpleDocTemplate(join(path_out, self.f))
+        styles = getSampleStyleSheet()
+        elements = []
+
+        # Draw patient details
+        elements.append(Paragraph('TOPCON CL300 Doc', style=styles['h2']))
+
+        textobject_common = self.details['date'] + ' ' + self.details['time']
+        elements.append(Paragraph(textobject_common, style=styles['Normal']))
+
+        textobject_patient_name = 'Name: ' + self.details['patientName']
+        textobject_patient_surname = 'Surame: ' + self.details['patientSurname']
+        textobject_patient_id = 'Personal Number: ' + self.details['patientId']
+        elements.append(Paragraph(textobject_patient_name, style=styles['Normal']))
+        elements.append(Paragraph(textobject_patient_surname, style=styles['Normal']))
+        elements.append(Paragraph(textobject_patient_id, style=styles['Normal']))
+
+        # Draw table with measure data
+        data_measure = [['Eye', 'Left', '', 'Eye', 'Right'],
+                ['Sphere', self.details['lSphere'], '', 'Sphere', self.details['rSphere']],
+                ['Cylinder', self.details['lCylinder'], '', 'Cylinder', self.details['rCylinder']],
+                ['Axis', self.details['lAxis'], '', 'Axis', self.details['rAxis']]]
+        
+        t=Table(data_measure,5*[1*inch], 4*[0.4*inch])
+        t.setStyle(TableStyle([('ALIGN',(0,0),(-1,-1),'LEFT'),
+        ('INNERGRID', (0,0), (1,3), 0.25, colors.black),
+        ('INNERGRID', (3,0), (4,3), 0.25, colors.black)
+        ]))
+
+        # Save document
+        elements.append(t)
+        doc.build(elements)
+
+# Decapsulate file from path
+f = lambda x: x.split(path_in)[1]
+
 # Search for files in input path
 chdir(path_in)
 files = filter(isfile, listdir(path_in))
 files = [join(path_in, f) for f in files if "xml" in f]
 files.sort(key=lambda x: getmtime(x), reverse=True)
-f = lambda x: x.split(path_in)[1]
 
 # Generate doc - click button event
-def generateDoc (event):
+def processData (event):
     selected = files[lbox.curselection()[0]]
     name = entry_name.get()
     surname = entry_surname.get()
@@ -68,6 +109,7 @@ def generateDoc (event):
     print(measure.getDetails())
 
     if len(list(measure.details)) > 0:
+        measure.generateDoc()
         entry_name.delete(0, tk.END)
         entry_surname.delete(0, tk.END)
         entry_id.delete(0, tk.END)
@@ -105,7 +147,7 @@ for file in files:
     lbox.insert(tk.END, f(file))
 
 # Bind actions
-button_submit.bind('<Button-1>', generateDoc)
+button_submit.bind('<Button-1>', processData)
 button_explore.bind('<Button-1>', exploreInputPath)
 
 # Begin mainloop
