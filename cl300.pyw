@@ -144,21 +144,30 @@ entry_name = tk.Entry(window)
 entry_surname = tk.Entry(window)
 entry_id = tk.Entry(window)
 
+label_glass_type = tk.Label(window, text="Glass type")
+glass_type = tk.StringVar()
+radio_glasstype_1 = tk.Radiobutton(window, text="for distance vision", variable=glass_type, value="for distance vision")
+radio_glasstype_2 = tk.Radiobutton(window, text="for near vision", variable=glass_type, value="for near vision")
+glass_type.set("for distance vision")
+
 button_submit = tk.Button(window, text="Generate PDF")
 button_explore = tk.Button(window, text="Explore output")
 
-lbox.grid(row=0, column=0, rowspan=7, padx=10, pady=10)
+lbox.grid(row=0, column=0, rowspan=8, columnspan=2, padx=10, pady=(0, 10))
 
-label_section_name.grid(row=0, column=1, padx=(0, 10), pady=(10, 0))
-label_name.grid(row=1, column=1)
-entry_name.grid(row=2, column=1, padx=(0, 10))
-label_surname.grid(row=3, column=1)
-entry_surname.grid(row=4, column=1, padx=(0, 10))
-label_id.grid(row=5, column=1)
-entry_id.grid(row=6, column=1, padx=(0, 10))
+label_section_name.grid(row=0, column=2, padx=(0, 10), pady=(10, 10))
+label_name.grid(row=1, column=2)
+entry_name.grid(row=2, column=2, padx=(0, 10))
+label_surname.grid(row=3, column=2)
+entry_surname.grid(row=4, column=2, padx=(0, 10))
+label_id.grid(row=5, column=2)
+entry_id.grid(row=6, column=2, padx=(0, 10))
+label_glass_type.grid(row=7, column=2, pady=(20, 0))
+radio_glasstype_1.grid(row=8, column=2, sticky=tk.W)
+radio_glasstype_2.grid(row=9, column=2, sticky=tk.W)
 
-button_submit.grid(padx=10, pady=(0, 10), sticky=tk.W+tk.E)
-button_explore.grid(padx=10, pady=(0, 10), sticky=tk.W+tk.E)
+button_submit.grid(column=0, row=9, padx=10, pady=(0, 10), sticky=tk.W+tk.E)
+button_explore.grid(column=1, row=9, padx=10, pady=(0, 10), sticky=tk.W+tk.E)
 
 # Feed listbox with files
 for file in files:
