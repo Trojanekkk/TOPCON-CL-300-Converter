@@ -25,7 +25,7 @@ nsLM = "{http://www.joia.or.jp/standardized/namespaces/LM}"
 
 # Define Measure class
 class Measure:
-    def __init__ (self, file, name, surname, id, path_in="input", path_out="output"):
+    def __init__ (self, file, name, surname, id, glass_type, path_in="input", path_out="output"):
         self.file = file
         self.f = f(file)
         tree = ET.parse(join(path_in, file))
@@ -37,6 +37,7 @@ class Measure:
             'measuer_id' : self.getObj("./Common/Patient/ID", nsCommon).text,
 
             'lensType' : self.getObj("./Measure/LensType", nsLM).text,
+            'glassType' : glass_type,
 
             'rSphere' : self.getObj("./Measure/LM/R/Sphere", nsLM).text,
             'rCylinder' : self.getObj("./Measure/LM/R/Cylinder", nsLM).text,
@@ -49,7 +50,7 @@ class Measure:
             'lSphere' : self.getObj("./Measure/LM/L/Sphere", nsLM).text,
             'lCylinder' : self.getObj("./Measure/LM/L/Cylinder", nsLM).text,
             'lAxis' : self.getObj("./Measure/LM/L/Axis", nsLM).text,
-            'lrAdd1Unit' : self.getObj("./Measure/LM/L/Add1", nsLM).attrib['unit'],
+            'lAdd1Unit' : self.getObj("./Measure/LM/L/Add1", nsLM).attrib['unit'],
             'lAdd2Unit' : self.getObj("./Measure/LM/L/Add2", nsLM).attrib['unit'],
             'lHPrism' : self.getObj("./Measure/LM/L/H", nsLM).attrib['Prism'],
             'lVPrism' : self.getObj("./Measure/LM/L/V", nsLM).attrib['Prism'],
@@ -83,20 +84,48 @@ class Measure:
         elements.append(Paragraph(textobject_patient_surname, style=styles['Normal']))
         elements.append(Paragraph(textobject_patient_id, style=styles['Normal']))
 
-        # Draw table with measure data
-        data_measure = [['Eye', 'Left', '', 'Eye', 'Right'],
-                ['Sphere', self.details['lSphere'], '', 'Sphere', self.details['rSphere']],
-                ['Cylinder', self.details['lCylinder'], '', 'Cylinder', self.details['rCylinder']],
-                ['Axis', self.details['lAxis'], '', 'Axis', self.details['rAxis']]]
+        # Draw table with measure data and glass type
+        data_measure = [[
+            '', 
+            'Sphere', 
+            'Cylinder', 
+            'Axis', 
+            'Add1', 
+            'HPrism', 
+            'VPrism'
+        ],[
+            'OD', 
+            self.details['rSphere'], 
+            self.details['rCylinder'], 
+            self.details['rAxis'], 
+            self.details['rAdd1Unit'], 
+            self.details['rHPrism'], 
+            self.details['rVPrism']
+        ],[
+            'OS', 
+            self.details['lSphere'], 
+            self.details['lCylinder'], 
+            self.details['lAxis'], 
+            self.details['lAdd1Unit'], 
+            self.details['lHPrism'], 
+            self.details['lVPrism']
+        ]]
         
-        t=Table(data_measure,5*[1*inch], 4*[0.4*inch])
-        t.setStyle(TableStyle([('ALIGN',(0,0),(-1,-1),'LEFT'),
-        ('INNERGRID', (0,0), (1,3), 0.25, colors.black),
-        ('INNERGRID', (3,0), (4,3), 0.25, colors.black)
+        t=Table(data_measure,5*[0.8*inch], 3*[0.4*inch])
+        t.setStyle(TableStyle([
+            ('TEXTCOLOR',(1,0),(-1,-3),colors.gray),
+            ('ALIGN',(1,0),(-1,-3),'CENTER'),
+            ('ALIGN',(0,1),(-1,-1),'LEFT'),
+            ('VALIGN',(0,2),(-1,-1),'TOP'),
+            ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black)
         ]))
 
-        # Save document
         elements.append(t)
+
+        textobject_glass_type = '<br/><br/> Glass type ' + self.details['glassType']
+        elements.append(Paragraph(textobject_glass_type, style=styles['Normal']))
+
+        # Save document
         doc.build(elements)
 
 # Decapsulate file from path
@@ -117,8 +146,9 @@ def processData (event):
     name = entry_name.get()
     surname = entry_surname.get()
     id = entry_id.get()
+    glass_type_value = glass_type.get()
 
-    measure = Measure(selected, name, surname, id)
+    measure = Measure(selected, name, surname, id, glass_type_value)
     print(measure.getDetails())
 
     if len(list(measure.details)) > 0:
@@ -162,11 +192,11 @@ label_surname.grid(row=3, column=2)
 entry_surname.grid(row=4, column=2, padx=(0, 10))
 label_id.grid(row=5, column=2)
 entry_id.grid(row=6, column=2, padx=(0, 10))
-label_glass_type.grid(row=7, column=2, pady=(20, 0))
+label_glass_type.grid(row=7, column=2, pady=(15, 0))
 radio_glasstype_1.grid(row=8, column=2, sticky=tk.W)
 radio_glasstype_2.grid(row=9, column=2, sticky=tk.W)
 
-button_submit.grid(column=0, row=9, padx=10, pady=(0, 10), sticky=tk.W+tk.E)
+button_submit.grid(column=0, row=9, padx=(10, 0), pady=(0, 10), sticky=tk.W+tk.E)
 button_explore.grid(column=1, row=9, padx=10, pady=(0, 10), sticky=tk.W+tk.E)
 
 # Feed listbox with files
