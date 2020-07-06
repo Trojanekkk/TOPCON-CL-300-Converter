@@ -1,5 +1,6 @@
 from os import listdir, chdir, startfile
 from os.path import isfile, join, getmtime
+
 from xml.etree import ElementTree as ET
 import tkinter as tk
 from reportlab.lib import colors
@@ -7,9 +8,18 @@ from reportlab.lib.pagesizes import inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 
+__author__ = "Wojciech Trojanowski"
+__copyright__ = "Copyright 2020, Wojciech Trojanowski"
+__credits__ = ["Wojciech Trojanowski"]
+__license__ = "MIT License"
+__version__ = "1.0.0"
+__maintainer__ = "Wojciech Trojanowski"
+__email__ = "rukavina.andrei@gmail.com"
+__status__ = "Dev"
+
 # App config
-path_in = "C:/Users/Wojciech Trojanowski/OneDrive/Projekty/Python/TOPCON-CL-300-Converter/input/"
-path_out = "C:/Users/Wojciech Trojanowski/OneDrive/Projekty/Python/TOPCON-CL-300-Converter/output/"
+path_in = "C:/input/"
+path_out = "C:/output/"
 nsCommon = "{http://www.joia.or.jp/standardized/namespaces/Common}"
 nsLM = "{http://www.joia.or.jp/standardized/namespaces/LM}"
 
@@ -124,26 +134,31 @@ def exploreInputPath (event):
 window = tk.Tk()
 window.title("TOPCON CL300 Doc converter - SPEKTRUM Sp. z o.o.")
 
-lbox = tk.Listbox(window, selectmode="SINGLE")
+lbox = tk.Listbox(window, selectmode="SINGLE", width="60")
 
-label_name = tk.Label(window, text="Imię")
-label_surname = tk.Label(window, text="Nazwisko")
-label_id = tk.Label(window, text="PESEL")
+label_section_name = tk.Label(window, text="Additional details", font=(None, 10, "bold"))
+label_name = tk.Label(window, text="Name")
+label_surname = tk.Label(window, text="Surname")
+label_id = tk.Label(window, text="Personal Number")
 entry_name = tk.Entry(window)
 entry_surname = tk.Entry(window)
 entry_id = tk.Entry(window)
-button_submit = tk.Button(window, text="Generuj dokument")
-button_explore = tk.Button(window, text="Otwórz folder wyjsciowy")
 
-lbox.grid(row=0, column=0, rowspan=6, padx=10, pady=10)
-label_name.grid(row=0, column=1)
-entry_name.grid(row=1, column=1, padx=(0, 10))
-label_surname.grid(row=2, column=1)
-entry_surname.grid(row=3, column=1, padx=(0, 10))
-label_id.grid(row=4, column=1)
-entry_id.grid(row=5, column=1, padx=(0, 10))
-button_submit.grid(pady=(0, 10))
-button_explore.grid(pady=(0, 10))
+button_submit = tk.Button(window, text="Generate PDF")
+button_explore = tk.Button(window, text="Explore output")
+
+lbox.grid(row=0, column=0, rowspan=7, padx=10, pady=10)
+
+label_section_name.grid(row=0, column=1, padx=(0, 10), pady=(10, 0))
+label_name.grid(row=1, column=1)
+entry_name.grid(row=2, column=1, padx=(0, 10))
+label_surname.grid(row=3, column=1)
+entry_surname.grid(row=4, column=1, padx=(0, 10))
+label_id.grid(row=5, column=1)
+entry_id.grid(row=6, column=1, padx=(0, 10))
+
+button_submit.grid(padx=10, pady=(0, 10), sticky=tk.W+tk.E)
+button_explore.grid(padx=10, pady=(0, 10), sticky=tk.W+tk.E)
 
 # Feed listbox with files
 for file in files:
