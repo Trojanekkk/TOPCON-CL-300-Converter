@@ -77,9 +77,9 @@ class Measure:
         textobject_common = self.details['date'] + ' ' + self.details['time'] + '<br/><br/>'
         elements.append(Paragraph(textobject_common, style=styles['Normal']))
 
-        textobject_patient_name = 'Name: ' + self.details['patientName']
-        textobject_patient_surname = 'Surame: ' + self.details['patientSurname']
-        textobject_patient_id = 'Personal Number: ' + self.details['patientId'] + '<br/><br/>'
+        textobject_patient_name = 'Imię: ' + self.details['patientName']
+        textobject_patient_surname = 'Nazwisko: ' + self.details['patientSurname']
+        textobject_patient_id = 'PESEL: ' + self.details['patientId'] + '<br/><br/>'
         elements.append(Paragraph(textobject_patient_name, style=styles['Normal']))
         elements.append(Paragraph(textobject_patient_surname, style=styles['Normal']))
         elements.append(Paragraph(textobject_patient_id, style=styles['Normal']))
@@ -87,9 +87,9 @@ class Measure:
         # Draw table with measure data and glass type
         data_measure = [[
             '', 
-            'Sphere', 
+            'Sfera', 
             'Cylinder', 
-            'Axis', 
+            'Oś', 
             'Add1', 
             'HPrism', 
             'VPrism'
@@ -122,7 +122,7 @@ class Measure:
 
         elements.append(t)
 
-        textobject_glass_type = '<br/><br/> Glass type ' + self.details['glassType']
+        textobject_glass_type = '<br/><br/> Okulary ' + self.details['glassType']
         elements.append(Paragraph(textobject_glass_type, style=styles['Normal']))
 
         # Save document
@@ -166,22 +166,22 @@ window.title("TOPCON CL300 Doc converter - SPEKTRUM Sp. z o.o.")
 
 lbox = tk.Listbox(window, selectmode="SINGLE", width="60")
 
-label_section_name = tk.Label(window, text="Additional details", font=(None, 10, "bold"))
-label_name = tk.Label(window, text="Name")
-label_surname = tk.Label(window, text="Surname")
-label_id = tk.Label(window, text="Personal Number")
+label_section_name = tk.Label(window, text="Dodatkowe informacje", font=(None, 10, "bold"))
+label_name = tk.Label(window, text="Imię")
+label_surname = tk.Label(window, text="Nazwisko")
+label_id = tk.Label(window, text="PESEL")
 entry_name = tk.Entry(window)
 entry_surname = tk.Entry(window)
 entry_id = tk.Entry(window)
 
-label_glass_type = tk.Label(window, text="Glass type")
+label_glass_type = tk.Label(window, text="Okulary")
 glass_type = tk.StringVar()
-radio_glasstype_1 = tk.Radiobutton(window, text="for distance vision", variable=glass_type, value="for distance vision")
-radio_glasstype_2 = tk.Radiobutton(window, text="for near vision", variable=glass_type, value="for near vision")
-glass_type.set("for distance vision")
+radio_glasstype_1 = tk.Radiobutton(window, text="do dali", variable=glass_type, value="do dali")
+radio_glasstype_2 = tk.Radiobutton(window, text="do bliży", variable=glass_type, value="do bliży")
+glass_type.set("do dali")
 
-button_submit = tk.Button(window, text="Generate PDF")
-button_explore = tk.Button(window, text="Explore output")
+button_submit = tk.Button(window, text="Generuj PDF")
+button_explore = tk.Button(window, text="Otwórz folder wyj.")
 
 lbox.grid(row=0, column=0, rowspan=8, columnspan=2, padx=10, pady=(0, 10))
 
