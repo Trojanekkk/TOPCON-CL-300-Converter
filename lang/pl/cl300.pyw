@@ -1,12 +1,18 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from os import listdir, chdir, startfile
 from os.path import isfile, join, getmtime
 
+from plyer import notification
 from xml.etree import ElementTree as ET
 import tkinter as tk
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 __author__ = "Wojciech Trojanowski"
 __copyright__ = "Copyright 2020, Wojciech Trojanowski"
@@ -67,6 +73,8 @@ class Measure:
         return self.details
 
     def generateDoc (self):
+        pdfmetrics.registerFont(TTFont('DejaVuSerif','DejaVuSerif.ttf', 'UTF-8'))
+
         doc = SimpleDocTemplate(join(path_out, fe(self.f)))
         styles = getSampleStyleSheet()
         elements = []
@@ -77,8 +85,8 @@ class Measure:
         textobject_common = self.details['date'] + ' ' + self.details['time'] + '<br/><br/>'
         elements.append(Paragraph(textobject_common, style=styles['Normal']))
 
-        textobject_patient_name = 'Imię: ' + self.details['patientName']
-        textobject_patient_surname = 'Nazwisko: ' + self.details['patientSurname']
+        textobject_patient_name = string_latin('Imię: ') + string_latin(self.details['patientName'])
+        textobject_patient_surname = 'Nazwisko: ' + string_latin(self.details['patientSurname'])
         textobject_patient_id = 'PESEL: ' + self.details['patientId'] + '<br/><br/>'
         elements.append(Paragraph(textobject_patient_name, style=styles['Normal']))
         elements.append(Paragraph(textobject_patient_surname, style=styles['Normal']))
@@ -89,7 +97,7 @@ class Measure:
             '', 
             'Sfera', 
             'Cylinder', 
-            'Oś', 
+            'Os', 
             'Add1', 
             'HPrism', 
             'VPrism'
@@ -122,17 +130,27 @@ class Measure:
 
         elements.append(t)
 
-        textobject_glass_type = '<br/><br/> Okulary ' + self.details['glassType']
+        textobject_glass_type = '<br/><br/> Okulary ' + string_latin(self.details['glassType'])
         elements.append(Paragraph(textobject_glass_type, style=styles['Normal']))
 
         # Save document
         doc.build(elements)
+
+        notification.notify(
+            title="TOPCON CL300 Converter",
+            message="Wygenerowano nowy dokument",
+            app_name="TOPCON CL300 Converter"
+        )
 
 # Decapsulate file from path
 f = lambda x: x.split(path_in)[1]
 
 # Convert file extension to pdf
 fe = lambda x: x.split('.')[0] + ".pdf"
+
+# Convert string to latin (reportLab)
+def string_latin(text):
+    return f'<font name="DejaVuSerif">{text}</font>'
 
 # Search for files in input path
 chdir(path_in)
@@ -142,20 +160,27 @@ files.sort(key=lambda x: getmtime(x), reverse=True)
 
 # Generate doc - click button event
 def processData (event):
-    selected = files[lbox.curselection()[0]]
-    name = entry_name.get()
-    surname = entry_surname.get()
-    id = entry_id.get()
-    glass_type_value = glass_type.get()
+    if len(lbox.curselection()) < 1:
+        notification.notify(
+            title="TOPCON CL300 Converter",
+            message="Nie wybrano żadnego dokumentu",
+            app_name="TOPCON CL300 Converter"
+        )
+    else:
+        selected = files[lbox.curselection()[0]]
+        name = entry_name.get()
+        surname = entry_surname.get()
+        id = entry_id.get()
+        glass_type_value = glass_type.get()
 
-    measure = Measure(selected, name, surname, id, glass_type_value)
-    print(measure.getDetails())
+        measure = Measure(selected, name, surname, id, glass_type_value)
+        print(measure.getDetails())
 
-    if len(list(measure.details)) > 0:
-        measure.generateDoc()
-        entry_name.delete(0, tk.END)
-        entry_surname.delete(0, tk.END)
-        entry_id.delete(0, tk.END)
+        if len(list(measure.details)) > 0:
+            measure.generateDoc()
+            entry_name.delete(0, tk.END)
+            entry_surname.delete(0, tk.END)
+            entry_id.delete(0, tk.END)
     
 def exploreInputPath (event):
     startfile(path_out)

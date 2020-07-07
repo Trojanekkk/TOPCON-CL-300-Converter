@@ -1,6 +1,7 @@
 from os import listdir, chdir, startfile
 from os.path import isfile, join, getmtime
 
+from plyer import notification
 from xml.etree import ElementTree as ET
 import tkinter as tk
 from reportlab.lib import colors
@@ -128,6 +129,12 @@ class Measure:
         # Save document
         doc.build(elements)
 
+        notification.notify(
+            title="TOPCON CL300 Converter",
+            message="Generated a new doc",
+            app_name="TOPCON CL300 Converter"
+        )
+
 # Decapsulate file from path
 f = lambda x: x.split(path_in)[1]
 
@@ -142,20 +149,27 @@ files.sort(key=lambda x: getmtime(x), reverse=True)
 
 # Generate doc - click button event
 def processData (event):
-    selected = files[lbox.curselection()[0]]
-    name = entry_name.get()
-    surname = entry_surname.get()
-    id = entry_id.get()
-    glass_type_value = glass_type.get()
+    if len(lbox.curselection()) < 1:
+        notification.notify(
+            title="TOPCON CL300 Converter",
+            message="No one doc has been selected",
+            app_name="TOPCON CL300 Converter"
+        )
+    else:
+        selected = files[lbox.curselection()[0]]
+        name = entry_name.get()
+        surname = entry_surname.get()
+        id = entry_id.get()
+        glass_type_value = glass_type.get()
 
-    measure = Measure(selected, name, surname, id, glass_type_value)
-    print(measure.getDetails())
+        measure = Measure(selected, name, surname, id, glass_type_value)
+        print(measure.getDetails())
 
-    if len(list(measure.details)) > 0:
-        measure.generateDoc()
-        entry_name.delete(0, tk.END)
-        entry_surname.delete(0, tk.END)
-        entry_id.delete(0, tk.END)
+        if len(list(measure.details)) > 0:
+            measure.generateDoc()
+            entry_name.delete(0, tk.END)
+            entry_surname.delete(0, tk.END)
+            entry_id.delete(0, tk.END)
     
 def exploreInputPath (event):
     startfile(path_out)
